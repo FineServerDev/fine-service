@@ -20,6 +20,10 @@ pub enum MessageType {
     EcosytemGetUserCreditRequest,
     #[serde(rename = "eco_get_user_credit_response")]
     EcosytemGetUserCreditResponse,
+    #[serde(rename = "eco_alter_user_credit_request")]
+    EcosytemAlterUserCreditRequest,
+    #[serde(rename = "eco_alter_user_credit_response")]
+    EcosytemAlterUserCreditResponse,
     // ...
 }
 // 所有websockte事件的外层包裹

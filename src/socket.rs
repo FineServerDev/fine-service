@@ -10,7 +10,7 @@ use axum::{
 use tracing::{info, log::warn};
 
 use crate::{
-    handler::ecosystem::{get_user_credit, set_user_credit},
+    handler::ecosystem::{alter_user_credit, get_user_credit, set_user_credit},
     message::{self, common::CommonErrorResponseData, MessageType},
     FineState,
 };
@@ -50,6 +50,9 @@ pub async fn socket_handler(mut socket: WebSocket, fine_state: Arc<FineState>) {
                         }
                         MessageType::EcosytemGetUserCreditRequest => {
                             resp = get_user_credit(msg.data, &mut redis_conn).await;
+                        }
+                        MessageType::EcosytemAlterUserCreditRequest => {
+                            resp = alter_user_credit(msg.data, &mut redis_conn).await;
                         }
                         _ => todo!(),
                     }
