@@ -7,6 +7,8 @@ use crate::model::ecosystem::EcosystemUserCreditAlterRecord;
 pub struct SetUserCreditRequestData {
     pub user_id: String,
     pub credit: i32,
+    #[serde(default = "default_resource")]
+    pub reason: String,
 }
 
 // 修改用户余额的返回报文载荷
@@ -14,6 +16,10 @@ pub struct SetUserCreditRequestData {
 pub struct SetUserCreditResponseData {
     pub user_id: String,
     pub credit: i32, // 返回修改后的值
+}
+
+fn default_resource() -> String {
+    "".to_string()
 }
 
 // 获取用户余额的报文载荷
@@ -35,6 +41,8 @@ pub struct GetUserCreditResponseData {
 pub struct AlterUserCreditRequestData {
     pub user_id: String,
     pub credit: i32,
+    #[serde(default = "default_resource")]
+    pub reason: String,
 }
 
 // 增加或减少用户余额的返回报文载荷

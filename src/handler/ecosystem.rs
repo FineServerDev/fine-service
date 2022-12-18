@@ -22,6 +22,14 @@ pub async fn set_user_credit(raw_data: serde_json::Value, redis_conn: &mut Conne
         user_record = serde_json::from_str(&user_record_json).unwrap();
     }
     user_record.credit = data.credit;
+    // TODO 封装redis的操作方法
+    user_record
+        .alter_records
+        .push(crate::model::ecosystem::EcosystemUserCreditAlterRecord {
+            time: chrono::Utc::now().timestamp(),
+            credit: data.credit,
+            reason: data.reason,
+        });
     // TODO 完善错误处理
     let r: Result<(), RedisError> = redis_conn
         .set(&redis_key, serde_json::to_string(&user_record).unwrap())
@@ -80,6 +88,13 @@ pub async fn alter_user_credit(
     let mut user_account: EcosystemUserAccountRecord =
         serde_json::from_str(user_account_record.unwrap().as_str()).unwrap();
     user_account.credit += data.credit;
+    user_account
+        .alter_records
+        .push(crate::model::ecosystem::EcosystemUserCreditAlterRecord {
+            time: chrono::Utc::now().timestamp(),
+            credit: data.credit,
+            reason: data.reason,
+        });
     if user_account.credit < 0 {
         return Message::from(CommonErrorResponseData {
             message: "credit not enough".to_string(),
@@ -151,10 +166,7 @@ pub async fn transfer_user_credit(
         .push(crate::model::ecosystem::EcosystemUserCreditAlterRecord {
             time: chrono::Utc::now().timestamp(),
             credit: req.credit,
-            reason: format!(
-                "transfer$#$from:{}$#$to:{}",
-                req.from_user_id, req.to_user_id
-            ),
+            reason: format!("transfer/from:{}/to:{}", req.from_user_id, req.to_user_id),
         });
     // TODO 引入transaction
     let _: () = redis_conn
