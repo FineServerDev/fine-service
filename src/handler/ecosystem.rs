@@ -55,6 +55,7 @@ pub async fn get_user_credit(raw_data: serde_json::Value, redis_conn: &mut Conne
     let resp_data = ecosystem::GetUserCreditResponseData {
         user_id: data.user_id,
         credit: user_account.credit,
+        alter_records: user_account.alter_records,
     };
     Message {
         message_type: MessageType::EcosytemGetUserCreditResponse,

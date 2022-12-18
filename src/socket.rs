@@ -34,7 +34,6 @@ pub async fn socket_handler(mut socket: WebSocket, fine_state: Arc<FineState>) {
         .unwrap();
     while let Some(msg) = socket.recv().await {
         if let Ok(msg) = msg {
-            info!("Received message: {:?}", msg);
             if let Message::Text(msg) = msg {
                 // 对消息进行初步反序列化
                 let msg_recv: Result<message::Message, serde_json::Error> =

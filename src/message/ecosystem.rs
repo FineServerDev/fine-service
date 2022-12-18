@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::model::ecosystem::EcosystemUserCreditAlterRecord;
+
 // 修改用户账户余额的报文载荷
 #[derive(Deserialize)]
 pub struct SetUserCreditRequestData {
@@ -25,6 +27,7 @@ pub struct GetUserCreditRequestData {
 pub struct GetUserCreditResponseData {
     pub user_id: String,
     pub credit: i32,
+    pub alter_records: Vec<EcosystemUserCreditAlterRecord>,
 }
 
 // 增加或减少用户余额的报文载荷
