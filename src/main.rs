@@ -31,8 +31,23 @@ async fn main() {
         .parse()
         .expect("illegal uin");
     let password = env::var("PASSWORD").expect("failed to read password");
+    let super_users = env::var("SUPER_USERS")
+        .expect("failed to read super users")
+        .split(',')
+        .map(|s| s.parse::<u64>().unwrap())
+        .collect::<Vec<_>>();
+    let allowed_groups = env::var("ALLOWED_GROUPS")
+        .expect("failed to read allowed groups")
+        .split(',')
+        .map(|s| s.parse::<u64>().unwrap())
+        .collect::<Vec<_>>();
 
-    tokio::spawn(bot::qq::qq_bot(uin, password));
+    tokio::spawn(bot::qq::qq_bot_client(
+        uin,
+        password,
+        super_users,
+        allowed_groups,
+    ));
 
     // redis client
     let redis_password = env::var("REDIS_PASSWORD").unwrap();
