@@ -1,10 +1,10 @@
 use axum::{routing::get, Router, Server};
-use rand::{prelude::StdRng, SeedableRng};
-use ricq::Device;
+
 use std::{env, net::SocketAddr, sync::Arc};
 
 use dotenvy::dotenv;
 
+mod bot;
 mod handler;
 mod message;
 mod model;
@@ -31,9 +31,10 @@ async fn main() {
         .parse()
         .expect("illegal uin");
     let password = env::var("PASSWORD").expect("failed to read password");
-    let mut seed = StdRng::seed_from_u64(uin as u64);
-    let device = Device::random_with_rng(&mut seed);
 
+    tokio::spawn(bot::qq::qq_bot(uin, password));
+
+    // redis client
     let redis_password = env::var("REDIS_PASSWORD").unwrap();
 
     let redis_client = redis::Client::open(format!(
