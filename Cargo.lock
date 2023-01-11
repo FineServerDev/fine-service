@@ -391,6 +391,7 @@ dependencies = [
  "axum",
  "chrono",
  "dotenvy",
+ "rand",
  "redis",
  "ricq",
  "serde",
